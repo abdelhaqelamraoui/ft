@@ -17,13 +17,16 @@
             <a class="nav-link active link-warning" aria-current="page" href="admin.php">Admin</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active link-warning" aria-current="page" href="index.php">User</a>
+            <a class="nav-link active link-warning" aria-current="page" href="index.php">Client</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active link-light" aria-current="page" href="#" id="link-about">About</a>
           </li>
            
         </ul>
+        <form method="post">
+          <Button type="submit" name="logout" class="btn btn-sm btn-outline-warning">Log out</Button>
+        </form>
         
       </div>
     </div>
@@ -31,3 +34,12 @@
   
   <script src="./bootstrap-5.2.3-dist/js/bootstrap.min.js"></script>
   <script src="header.js"></script>
+
+  <?php
+
+  if(isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+  }
+
+?>

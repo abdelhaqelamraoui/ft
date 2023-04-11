@@ -1,3 +1,13 @@
+
+<?php
+  session_start();
+  if(!isset($_SESSION['username'])) {
+    header('Location: index_admin.php');
+    exit(-1);
+  }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en" style="height: 100%;">
 

@@ -9,13 +9,13 @@ let listUploadedFiles = document.getElementById('list-uploaded-files')
 let fileContent = document.getElementById('bridge-file-content')
 
 
-let fileCounter = 1
+
 
 
 addBtn.addEventListener("click", () => {
   let e = document.createElement('div')
   e.className = "list-group-item"
-  e.innerHTML = '<input type="file" name="file-'+(fileCounter++)+'" class="form-control">'
+  e.innerHTML = '<input type="file" class="form-control">'
   filesForm.appendChild(e)
 })
 
