@@ -4,6 +4,15 @@
   if(!isset($_SESSION['username'])) {
     header('Location: index_admin.php');
     exit(-1);
+  } else {
+
+    $last_login = $_COOKIE['last_login'] ?? 'now';
+    $name = 'last_login';
+    $value = date("d/m/Y h:i:s a");
+    $expire = strtotime('next year');
+    $path = '/ft';
+    $domain = $_SERVER['SERVER_NAME'];
+    setcookie($name, $value, $expire, $path, $domain);
   }
 ?>
 
@@ -22,22 +31,6 @@
 
 <body class="container-fluid px-0 pt-5">
 
-<script>
-  // function refreshList() {
-  //   let listUploadedFiles = document.getElementById('list-uploaded-files')
-  //   let fileContent = document.getElementById('bridge-file-content')
-  //   // TODO use another script and use fetch method
-  //   let filenamesArr = document.getElementById('bridge-file-content').innerText.split('\n')
-  //   filenamesArr.forEach(element => {
-  //     console.log(element)
-  //     let li = document.createElement('li')
-  //     li.className = "list-group-item"
-  //     li.innerText = element
-  //     listUploadedFiles.appendChild(li)
-  //   })
-  // }
-</script>
-
   <?php include("header.php"); ?>
 
   <div class="container-fluid container-lg pb-sm-4 pb-md-4">
@@ -53,14 +46,12 @@
             </div>
           </li>
           <?php
-            const FILENAME_UF = "files/files";
-            $upfilenames = file(FILENAME_UF);
-            // if(isset($_POST['clean']) || $upfilenames == false || count($upfilenames) == 0) {
-            //   echo '<li class="list-group-item">No file is uploaded</li>';
-            // } else {
-              foreach($upfilenames as $fu) {
+            $files = scandir('./uploads');
+            $uploaded_files = array_diff($files, ['.', '..']);
+            if(!empty($uploaded_files)) {
+              foreach($uploaded_files as $fu) {
                 echo '<li class="list-group-item text-break">'.$fu.'</li>';
-              // }
+              }
             }
           ?>
         </ul>
@@ -70,6 +61,7 @@
         <div class="card mb-4">
           <div class="card-header text-center ">
             <h6 class="card-title mb-0">Séléctionner des fichiers à déposer</h6>
+            <p style="font-size: 12px;"> <?php echo "Last login: ". $last_login; ?></p>
           </div>
 
           <div class="card-body p-0">

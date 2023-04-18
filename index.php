@@ -21,61 +21,46 @@
     <div class="card">
       <div class="card-header text-center">
         <h3 class="card-title">Les fichiers déposés</h3>
-        <!-- <p class="cart-text text-muted" style="font-size: 13px;">
-         
-        </p> -->
       </div>
 
       <div class="card-body text-center">
         <ul class="list-group" id="list-uploaded-files">
           <?php
+          
             ini_set('display_errors', '1');
             ini_set('display_startup_errors', '1');
             error_reporting(E_ALL);
 
-            const FILENAME_UF = "files/files";
-            const FILENAME_RF = "files/readfilename";
-            const DIR_UPLOAD = "uploads";
+            $dirs = ["uploads", "files", "archive"];
 
-            $filenames = file(FILENAME_UF);
-            // var_dump($filenames);
+            try {
 
-            if(!$filenames) {
+              foreach($dirs as $d)
+                if(!is_dir($d))
+                  mkdir($d);
+            
+              $files = scandir($dirs[0]);
+              $uploaded_files = array_diff($files, ['.', '..']);
 
-              // echo("Error accessing ressources !!");
-              echo "Rien n'est encore déposé! <br>  -_-<br>";
-
-
-            } else {
-              
-              if(count($filenames) === 0) {
-
-                echo "Nothing is uploaded yet! <br>  -_-<br>";
-                return;
-
+              if(empty($uploaded_files)) {
+                echo "Rien n'est encore déposé! <br>  -_-<br>";
               } else {
-
-                foreach($filenames as $fn) {
-
-                  $fn = trim($fn);
-
-                  if(strlen($fn) > 1) {
-                    $p = DIR_UPLOAD."/$fn"; // the path of the file
-                    $f = fopen(FILENAME_RF, "w");
-                    fwrite($f, $p);
-                    echo <<< EOF
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <a href="#" class="text-break">$fn</a>
-                      <a href="$p" class="nav-link" download="$fn">
-                        <button  class="btn btn-primary">Download</button>
-                      </a>
-                    </li>
-                    EOF;
-                  }
+                foreach($uploaded_files as $uf) {
+                  echo <<< EOF
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="#" class="text-break">$uf</a>
+                    <a href="$dirs[0]/$uf" class="nav-link" download="$uf">
+                      <button  class="btn btn-primary">Download</button>
+                    </a>
+                  </li>
+                  EOF;
                 }
               }
-
+            } catch (Exception $e) {
+              // print($e);
+              print('Error: Permission denied!<br');
             }
+
 
           ?>
         </ul>
